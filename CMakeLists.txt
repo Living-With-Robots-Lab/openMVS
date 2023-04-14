@@ -41,7 +41,7 @@ SET(OpenMVS_USE_OPENMP ON CACHE BOOL "Enable OpenMP library")
 SET(OpenMVS_USE_OPENGL ON CACHE BOOL "Enable OpenGL library")
 SET(OpenMVS_USE_BREAKPAD ON CACHE BOOL "Enable BreakPad library")
 SET(OpenMVS_USE_CERES OFF CACHE BOOL "Enable CERES optimization library")
-SET(OpenMVS_USE_CUDA ON CACHE BOOL "Enable CUDA library")
+SET(OpenMVS_USE_CUDA OFF CACHE BOOL "Enable CUDA library")
 SET(OpenMVS_USE_FAST_FLOAT2INT ON CACHE BOOL "Use an optimized code to convert real numbers to int")
 SET(OpenMVS_USE_FAST_INVSQRT OFF CACHE BOOL "Use an optimized code to compute the inverse square root (slower in fact on modern compilers)")
 SET(OpenMVS_USE_FAST_CBRT ON CACHE BOOL "Use an optimized code to compute the cubic root")
@@ -99,15 +99,20 @@ if(OpenMVS_USE_OPENGL)
 	endif()
 endif()
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
 if(OpenMVS_USE_CUDA)
 	FIND_PACKAGE(CUDA)
 	if(CUDA_FOUND)
+		set(CMAKE_CUDA_STANDARD 14)
+		set(CMAKE_CUDA_STANDARD_REQUIRED TRUE)
 		ENABLE_LANGUAGE(CUDA)
 		# CUDA-11.x can not be compiled using C++14 standard on Windows
 		string(REGEX MATCH "^[0-9]+" CUDA_MAJOR ${CMAKE_CUDA_COMPILER_VERSION})
 		if(${CUDA_MAJOR} GREATER 10 AND CMAKE_CXX_COMPILER MATCHES "MSVC" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "19.29")
 			message("Working around windows build failure with visual studio. Visual studio 16.10 introduced a compiler bug with compilng CUDA code with C++14. Set the cuda standard to 17 as a workaround.")
-			set(CMAKE_CUDA_STANDARD 17)
+			set(CMAKE_CUDA_STANDARD 14)
 		endif()
 		EXECUTE_PROCESS(COMMAND "${CMAKE_CUDA_COMPILER}" --list-gpu-arch 
 				OUTPUT_VARIABLE LIST_GPU_ARCH 
@@ -290,5 +295,5 @@ CONFIGURE_FILE(
 	"${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
 	IMMEDIATE @ONLY)
 
-ADD_CUSTOM_TARGET(uninstall
+ADD_CUSTOM_TARGET(uninstall_openMVS
 	COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)

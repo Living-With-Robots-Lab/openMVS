@@ -922,7 +922,7 @@ bool TestRayTriangleIntersection(unsigned iters) {
 	typedef SEACAVE::TRay<TYPE,3> Ray;
 	typedef typename Ray::POINT Point;
 	typedef typename Point::Scalar Type;
-	constexpr Type zeroEps(ZEROTOLERANCE<Type>() * 1000);
+	const Type zeroEps(ZEROTOLERANCE<Type>() * 1000);
 	for (unsigned iter=0; iter<iters; ++iter) {
 		const Type scale(10);
 		const Triangle triangle(Point::Random()*scale, Point::Random()*scale, Point::Random()*scale);
