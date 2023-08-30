@@ -54,6 +54,7 @@ optional arguments:
                             MVG_SEQ = [0, 1, 2, 3, 4, 5, 7, 8, 9, 11]
                             MVG_GLOBAL = [0, 1, 2, 3, 4, 6, 7, 8, 9, 11]
                             COLMAP_MVS = [12, 13, 14, 15, 16, 17, 18, 19, 20]
+                            COLMAP_MVS = [12, 13, 14, 15, 16, 17, 18]
                             COLMAP = [12, 13, 14, 15, 16]
                             MVS = [17, 18, 19, 20]
                             MVS_SGM = [21, 22]
@@ -145,6 +146,7 @@ PRESET = {'SEQUENTIAL': [0, 1, 2, 3, 4, 5, 11, 17, 18, 19, 20],
           'MVG_SEQ': [0, 1, 2, 3, 4, 5, 7, 8, 9, 11],
           'MVG_GLOBAL': [0, 1, 2, 3, 4, 6, 7, 8, 9, 11],
           'COLMAP_MVS': [12, 13, 14, 15, 16, 17, 18, 19, 20],
+          'COLMAP_MVS_FAST': [12, 13, 14, 15, 16, 17, 18],
           'COLMAP': [12, 13, 14, 15, 16],
           'MVS': [17, 18, 19, 20],
           'MVS_SGM': [21, 22]}
@@ -264,7 +266,7 @@ class StepsStore:
              ["scene.mvs", "-w", "\"%mvs_dir%\""]],
             ["Reconstruct the mesh",         # 18
              os.path.join(OPENMVS_BIN, "ReconstructMesh"),
-             ["scene_dense.mvs", "-w", "\"%mvs_dir%\""]],
+             ["scene_dense.mvs", "--export-type", "obj", "-w", "\"%mvs_dir%\""]],
             ["Refine the mesh",              # 19
              os.path.join(OPENMVS_BIN, "RefineMesh"),
              ["scene_dense_mesh.mvs", "--scales", "1", "--gradient-step", "25.05", "-w", "\"%mvs_dir%\""]],
